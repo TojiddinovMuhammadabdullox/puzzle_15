@@ -12,27 +12,40 @@ class PuzzleGrid extends StatelessWidget {
     return BlocBuilder<PuzzleBloc, PuzzleState>(
       builder: (context, state) {
         return GridView.builder(
+          padding: const EdgeInsets.all(16),
           itemCount: 16,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4),
+            crossAxisCount: 4,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
           itemBuilder: (context, index) {
             final tile = state.tiles[index];
             return GestureDetector(
               onTap: () =>
                   PuzzleController(context.read<PuzzleBloc>()).moveTile(tile),
-              child: Container(
-                margin: const EdgeInsets.all(2),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
-                  color: tile == 0 ? Colors.white : Colors.blue,
-                  border: Border.all(color: Colors.black, width: 1),
-                  borderRadius: BorderRadius.circular(4),
+                  color: tile == 0 ? Colors.transparent : Colors.blue.shade400,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: tile == 0
+                      ? []
+                      : [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                 ),
                 child: Center(
                   child: Text(
                     tile == 0 ? '' : tile.toString(),
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: tile == 0 ? Colors.transparent : Colors.white,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),
